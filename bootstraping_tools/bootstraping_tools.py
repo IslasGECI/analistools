@@ -28,7 +28,7 @@ def remove_distribution_outliers(data):
 
 def seasons_from_date(data):
     seasons = data["Fecha"].str.split("/", n=2, expand=True)
-    return seasons[2]
+    return np.array(seasons[2])
 
 
 def boostrapping_feature(data, N=2000):
