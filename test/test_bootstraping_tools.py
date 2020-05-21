@@ -26,5 +26,9 @@ class TestAnalistools(unittest.TestCase):
         output = remove_distribution_outliers(self.data_original)
         self.assertTrue((output == self.data_original).all())
 
+    def test_boostrapping_feature(self):
+        output = boostrapping_feature(self.data_original, N = 2)
+        self.assertEqual(output, [2, 2])
+
 if __name__ == "__main__":
     unittest.main()
