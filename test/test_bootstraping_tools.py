@@ -34,5 +34,9 @@ class TestAnalistools(unittest.TestCase):
         output = get_bootstrap_interval(self.data_original)
         self.assertEqual(output, [0, 1, 0])
 
+    def test_calculate_p_values(self):
+        output = calculate_p_values(self.data_original)
+        self.assertEqual(output, (0.0, 0.14285714285714285))
+
 if __name__ == "__main__":
     unittest.main()
