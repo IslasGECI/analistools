@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 from bootstraping_tools import *
 
 def test_seasons_from_date():
@@ -15,10 +16,15 @@ class TestAnalistools(unittest.TestCase):
         self.T: int = 1
         self.Lambda = 2
         self.No: int = 1
+        self.data_original: np.array = np.array([1, 1, 1, 1, 1, 1, 2])
 
     def test_power_law(self):
         output = power_law(self.T, self.Lambda, self.No)
         self.assertEqual(output, 2)
+
+    def test_remove_distribution_outliers(self):
+        output = remove_distribution_outliers(self.data_original)
+        self.assertTrue((output == self.data_original).all())
 
 if __name__ == "__main__":
     unittest.main()
