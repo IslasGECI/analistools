@@ -30,5 +30,9 @@ class TestAnalistools(unittest.TestCase):
         output = boostrapping_feature(self.data_original, N = 2)
         self.assertEqual(output, [2, 2])
 
+    def test_get_bootstrap_interval(self):
+        output = get_bootstrap_interval(self.data_original)
+        self.assertEqual(output, [0, 1, 0])
+
 if __name__ == "__main__":
     unittest.main()
