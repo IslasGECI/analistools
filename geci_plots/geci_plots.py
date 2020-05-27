@@ -4,7 +4,9 @@ import matplotlib
 matplotlib.use('Agg')
 matplotlib.rcParams['figure.dpi'] = 300
 
+from matplotlib.ticker import MaxNLocator
 from mpl_toolkits.axes_grid1.anchored_artists import AnchoredSizeBar
+
 import matplotlib.pyplot as plt
 import numpy as np
 
