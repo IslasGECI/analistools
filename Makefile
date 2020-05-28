@@ -1,5 +1,8 @@
 mutation:
-	mutmut run --paths-to-mutate bootstraping_tools
+	mutmut run \
+		--paths-to-mutate bootstraping_tools \
+		--paths-to-mutate cli_paths \
+		--paths-to-mutate geci_plots
 
 .PHONY: clean install mutation tests
 
