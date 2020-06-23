@@ -17,9 +17,8 @@ matplotlib.rcParams["font.family"] = "STIXGeneral"
 islet_markers = {
     "Asuncion": "o",
     "Coronado": "^",
-    "Guadalupe - Solo islotes": "s",
-    "Guadalupe - Con islotes": "s",
-    "Guadalupe - Sin islotes": "X",
+    "Morro Prieto and Zapato": "s",
+    "Guadalupe": "X",
     "Natividad": "p",
     "San Benito": "h",
     "San Jeronimo": "D",
@@ -31,9 +30,8 @@ islet_markers = {
 islet_colors = {
     "Asuncion": "black",
     "Coronado": "red",
-    "Guadalupe - Solo islotes": "peru",
-    "Guadalupe - Con islotes": "peru",
-    "Guadalupe - Sin islotes": "gold",
+    "Morro Prieto and Zapato": "peru",
+    "Guadalupe": "gold",
     "Natividad": "green",
     "San Benito": "blue",
     "San Jeronimo": "purple",
