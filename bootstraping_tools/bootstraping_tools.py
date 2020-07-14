@@ -61,7 +61,7 @@ def lambdas_from_bootstrap_table(dataframe):
     return lambdas_bootstraps
 
 
-def lambdas_bootstrap_from_dataframe(dataframe, column_name, N=20, return_distribution=False):
+def lambdas_bootstrap_from_dataframe(dataframe, column_name, N=2000, return_distribution=False):
     bootstraped_data = pd.DataFrame()
     lambdas_bootstraps = []
     seasons = dataframe.sort_values(by="Temporada").Temporada.unique()
@@ -84,7 +84,7 @@ def get_bootstrap_interval(bootrap_interval):
     return [inferior_limit, bootrap_interval[1], superior_limit]
 
 
-def bootstrap_from_time_series(dataframe, column_name, N=20, return_distribution=False):
+def bootstrap_from_time_series(dataframe, column_name, N=2000, return_distribution=False):
     lambdas_bootstraps = []
     print("Calculating bootstrap growth rates distribution:")
     for i in tqdm(range(N)):
