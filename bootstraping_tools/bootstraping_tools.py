@@ -61,7 +61,7 @@ def lambdas_from_bootstrap_table(dataframe):
     return lambdas_bootstraps
 
 
-def lambdas_bootstrap_from_dataframe(dataframe, column_name, N=2000, return_distribution=False):
+def lambdas_bootstrap_from_dataframe(dataframe, column_name, N=2000, return_distribution=False, remove_outliers=True):
     bootstraped_data = pd.DataFrame()
     lambdas_bootstraps = []
     seasons = dataframe.sort_values(by="Temporada").Temporada.unique()
@@ -70,7 +70,8 @@ def lambdas_bootstrap_from_dataframe(dataframe, column_name, N=2000, return_dist
         data_per_season = dataframe[dataframe.Temporada == season]
         bootstraped_data[season] = boostrapping_feature(data_per_season[column_name], N)
     lambdas_bootstraps = lambdas_from_bootstrap_table(bootstraped_data)
-    lambdas_bootstraps = remove_distribution_outliers(lambdas_bootstraps)
+    if remove_outliers == True :
+        lambdas_bootstraps = remove_distribution_outliers(lambdas_bootstraps)
     if return_distribution == True:
         return lambdas_bootstraps, np.percentile(lambdas_bootstraps, [2.5, 50, 97.5])
     else:
