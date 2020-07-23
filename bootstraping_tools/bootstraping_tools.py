@@ -49,7 +49,7 @@ def boostrapping_feature(data, N=2000):
     return bootstrap_data
 
 
-def lambdas_from_bootstrap_table(dataframe):
+def lambdas_from_bootstrap_table(dataframe, remove_outliers=True):
     lambdas_bootstraps = []
     seasons = np.array(dataframe.columns.values, dtype=int)
     N = len(dataframe)
@@ -57,7 +57,8 @@ def lambdas_from_bootstrap_table(dataframe):
     for i in tqdm(range(N)):
         fitting_result = lambda_calculator(seasons, dataframe.T[i].values)
         lambdas_bootstraps.append(fitting_result[0])
-    lambdas_bootstraps = remove_distribution_outliers(lambdas_bootstraps)
+    if remove_outliers == True:
+        lambdas_bootstraps = remove_distribution_outliers(lambdas_bootstraps)
     return lambdas_bootstraps
 
 
@@ -70,7 +71,7 @@ def lambdas_bootstrap_from_dataframe(dataframe, column_name, N=2000, return_dist
         data_per_season = dataframe[dataframe.Temporada == season]
         bootstraped_data[season] = boostrapping_feature(data_per_season[column_name], N)
     lambdas_bootstraps = lambdas_from_bootstrap_table(bootstraped_data)
-    if remove_outliers == True :
+    if remove_outliers == True:
         lambdas_bootstraps = remove_distribution_outliers(lambdas_bootstraps)
     if return_distribution == True:
         return lambdas_bootstraps, np.percentile(lambdas_bootstraps, [2.5, 50, 97.5])
