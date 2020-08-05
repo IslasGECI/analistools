@@ -86,7 +86,7 @@ def get_bootstrap_interval(bootrap_interval):
     return [inferior_limit, bootrap_interval[1], superior_limit]
 
 
-def bootstrap_from_time_series(dataframe, column_name, N=2000, return_distribution=False):
+def bootstrap_from_time_series(dataframe, column_name, N=2000, return_distribution=False, remove_outliers=True):
     lambdas_bootstraps = []
     print("Calculating bootstrap growth rates distribution:")
     for i in tqdm(range(N)):
@@ -95,7 +95,8 @@ def bootstrap_from_time_series(dataframe, column_name, N=2000, return_distributi
         ).sort_index()
         fitting_result = lambda_calculator(resampled_data["Temporada"], resampled_data[column_name])
         lambdas_bootstraps.append(fitting_result[0])
-    lambdas_bootstraps = remove_distribution_outliers(lambdas_bootstraps)
+    if remove_outliers == True:
+        lambdas_bootstraps = remove_distribution_outliers(lambdas_bootstraps)
     if return_distribution == True:
         return lambdas_bootstraps, np.percentile(lambdas_bootstraps, [2.5, 50, 97.5])
     else:
