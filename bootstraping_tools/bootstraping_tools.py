@@ -27,11 +27,20 @@ def lambda_calculator(
     return popt
 
 
-def remove_distribution_outliers(data, std_limit=2.5):
+def remove_distribution_outliers(data, multiplier=2.5):
     data = np.array(data)
     mean = np.mean(data)
     std = np.std(data)
-    mask = abs(data - mean) < std * std_limit
+    mask = abs(data - mean) < std * multiplier
+    return data[mask]
+
+def tukey_fences(data, multiplier=1.5):
+    first_quantile = np.quantile(data,0.25)
+    third_quantile = np.quantile(data,0.75)
+    interquartile_range = third_quantile - first_quantile
+    lower_limit = first_quantile - (interquartile_range * multiplier)
+    upper_limit = third_quantile + (interquartile_range * multiplier)
+    mask = (data > lower_limit) & (data < upper_limit)
     return data[mask]
 
 
@@ -49,7 +58,7 @@ def boostrapping_feature(data, N=2000):
     return bootstrap_data
 
 
-def lambdas_from_bootstrap_table(dataframe, remove_outliers=True):
+def lambdas_from_bootstrap_table(dataframe, remove_outliers=True, outlier_method='tukey', **kwargs):
     lambdas_bootstraps = []
     seasons = np.array(dataframe.columns.values, dtype=int)
     N = len(dataframe)
@@ -58,11 +67,16 @@ def lambdas_from_bootstrap_table(dataframe, remove_outliers=True):
         fitting_result = lambda_calculator(seasons, dataframe.T[i].values)
         lambdas_bootstraps.append(fitting_result[0])
     if remove_outliers == True:
-        lambdas_bootstraps = remove_distribution_outliers(lambdas_bootstraps)
+        if outlier_method == 'tukey':
+            lambdas_bootstraps = tukey_fences(lambdas_bootstraps, **kwargs)
+        elif outlier_method == 'std':
+            lambdas_bootstraps = remove_distribution_outliers(lambdas_bootstraps, **kwargs)
+        else: 
+            raise Exception('No se reconoce el método de filtrado')
     return lambdas_bootstraps
 
 
-def lambdas_bootstrap_from_dataframe(dataframe, column_name, N=2000, return_distribution=False, remove_outliers=True):
+def lambdas_bootstrap_from_dataframe(dataframe, column_name, N=2000, return_distribution=False, remove_outliers=True, outlier_method='tukey', **kwargs):
     bootstraped_data = pd.DataFrame()
     lambdas_bootstraps = []
     seasons = dataframe.sort_values(by="Temporada").Temporada.unique()
@@ -72,7 +86,12 @@ def lambdas_bootstrap_from_dataframe(dataframe, column_name, N=2000, return_dist
         bootstraped_data[season] = boostrapping_feature(data_per_season[column_name], N)
     lambdas_bootstraps = lambdas_from_bootstrap_table(bootstraped_data)
     if remove_outliers == True:
-        lambdas_bootstraps = remove_distribution_outliers(lambdas_bootstraps)
+        if outlier_method == 'tukey':
+            lambdas_bootstraps = tukey_fences(lambdas_bootstraps, **kwargs)
+        elif outlier_method == 'std':
+            lambdas_bootstraps = remove_distribution_outliers(lambdas_bootstraps, **kwargs)
+        else: 
+            raise Exception('No se reconoce el método de filtrado')
     if return_distribution == True:
         return lambdas_bootstraps, np.percentile(lambdas_bootstraps, [2.5, 50, 97.5])
     else:
@@ -86,7 +105,7 @@ def get_bootstrap_interval(bootrap_interval):
     return [inferior_limit, bootrap_interval[1], superior_limit]
 
 
-def bootstrap_from_time_series(dataframe, column_name, N=2000, return_distribution=False, remove_outliers=True):
+def bootstrap_from_time_series(dataframe, column_name, N=2000, return_distribution=False, remove_outliers=True, outlier_method='tukey', **kwargs):
     lambdas_bootstraps = []
     print("Calculating bootstrap growth rates distribution:")
     for i in tqdm(range(N)):
@@ -96,7 +115,12 @@ def bootstrap_from_time_series(dataframe, column_name, N=2000, return_distributi
         fitting_result = lambda_calculator(resampled_data["Temporada"], resampled_data[column_name])
         lambdas_bootstraps.append(fitting_result[0])
     if remove_outliers == True:
-        lambdas_bootstraps = remove_distribution_outliers(lambdas_bootstraps)
+        if outlier_method == 'tukey':
+            lambdas_bootstraps = tukey_fences(lambdas_bootstraps, **kwargs)
+        elif outlier_method == 'std':
+            lambdas_bootstraps = remove_distribution_outliers(lambdas_bootstraps, **kwargs)
+        else: 
+            raise Exception('No se reconoce el método de filtrado')
     if return_distribution == True:
         return lambdas_bootstraps, np.percentile(lambdas_bootstraps, [2.5, 50, 97.5])
     else:
