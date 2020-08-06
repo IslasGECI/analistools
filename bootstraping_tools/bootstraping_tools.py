@@ -35,6 +35,7 @@ def remove_distribution_outliers(data, multiplier=2.5):
     return data[mask]
 
 def tukey_fences(data, multiplier=1.5):
+    data = np.array(data)
     first_quantile = np.quantile(data,0.25)
     third_quantile = np.quantile(data,0.75)
     interquartile_range = third_quantile - first_quantile
@@ -106,15 +107,14 @@ def get_bootstrap_interval(bootrap_interval):
 
 
 def bootstrap_from_time_series(dataframe, column_name, N=2000, return_distribution=False, remove_outliers=True, outlier_method='tukey', **kwargs):
-    lambdas_bootstraps = np.array([])
+    lambdas_bootstraps = []
     print("Calculating bootstrap growth rates distribution:")
     for i in tqdm(range(N)):
         resampled_data = dataframe.sample(
             n=len(dataframe), replace=True, random_state=i
         ).sort_index()
         fitting_result = lambda_calculator(resampled_data["Temporada"], resampled_data[column_name])
-        lambdas_bootstraps = np.append(lambdas_bootstraps, fitting_result[0])
-
+        lambdas_bootstraps.append(fitting_result[0])
     if remove_outliers == True:
         if outlier_method == 'tukey':
             lambdas_bootstraps = tukey_fences(lambdas_bootstraps, **kwargs)
