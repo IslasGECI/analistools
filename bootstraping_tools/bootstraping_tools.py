@@ -106,15 +106,23 @@ def get_bootstrap_interval(bootrap_interval):
     return [inferior_limit, bootrap_interval[1], superior_limit]
 
 
-def bootstrap_from_time_series(dataframe, column_name, N=2000, return_distribution=False, remove_outliers=True, outlier_method='tukey', **kwargs):
+def bootstrap_from_time_seriesss(dataframe, column_name, N=2000, return_distribution=False, remove_outliers=True, outlier_method='tukey', **kwargs):
     lambdas_bootstraps = []
-    print("Calculating bootstrap growth rates distribution:")
-    for i in tqdm(range(N)):
-        resampled_data = dataframe.sample(
-            n=len(dataframe), replace=True, random_state=i
-        ).sort_index()
-        fitting_result = lambda_calculator(resampled_data["Temporada"], resampled_data[column_name])
+    cont = 0
+    rand = 0
+    print("Calculating bootstrap growth rates distribution:")    
+    while cont < N:
+        resampled_data = dataframe.sample(n=len(dataframe), replace=True, random_state=rand).sort_index()
+        print(cont)
+        try:
+            fitting_result = lambda_calculator(resampled_data["Temporada"], resampled_data[column_name])
+            print(cont)
+        except RuntimeError:
+            rand += 1
+            continue
         lambdas_bootstraps.append(fitting_result[0])
+        cont += 1
+        rand += 1
     if remove_outliers == True:
         if outlier_method == 'tukey':
             lambdas_bootstraps = tukey_fences(lambdas_bootstraps, **kwargs)
@@ -126,6 +134,7 @@ def bootstrap_from_time_series(dataframe, column_name, N=2000, return_distributi
         return lambdas_bootstraps, np.percentile(lambdas_bootstraps, [2.5, 50, 97.5])
     else:
         return np.percentile(lambdas_bootstraps, [2.5, 50, 97.5])
+
 
 
 def calculate_p_values(distribution):
