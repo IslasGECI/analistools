@@ -132,12 +132,10 @@ def bootstrap_from_time_series(
         resampled_data = dataframe.sample(
             n=len(dataframe), replace=True, random_state=rand
         ).sort_index()
-        print(cont)
         try:
             fitting_result = lambda_calculator(
                 resampled_data["Temporada"], resampled_data[column_name]
             )
-            print(cont)
         except RuntimeError:
             rand += 1
             continue
