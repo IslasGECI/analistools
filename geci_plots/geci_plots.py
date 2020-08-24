@@ -48,6 +48,15 @@ def geci_plot():
     plt.yticks(rotation=90)
     return fig, ax
 
+def plot_histogram_with_limits(x, bins, limits = [], plot_options = {}, lines_options = {}):
+    fig, ax = geci_plot()
+    ax.hist(x, bins=bins, **plot_options)
+    for lines in limits:
+        ax.axvline(x=lines,**lines_options)
+    return ax
+
+def roundup(x, multiplo):
+    return np.ceil(x / multiplo) * multiplo
 
 def fix_date(date):
     return (
@@ -140,5 +149,8 @@ def plot_location_plot(ax, linea_costa, margen_x, margen_y, box_length=500):
         axins.spines[axis].set_linewidth(2)
 
 
-def roundup(x, multiplo):
-    return np.ceil(x / multiplo) * multiplo
+
+
+
+
+
