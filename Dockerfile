@@ -1,12 +1,16 @@
 FROM python:3
 
-RUN pip install --upgrade pip && \
-    pip install \
+RUN pip install \
+    autopep8 \
+    black \
+    codecov \
+    flake8 \
     mutmut \
     numpy \
     pandas \
-    scipy \
-    tqdm \
+    pylint \
+    pylint-fail-under \
+    pytest-cov \
     pytest==5.0.1
 
 WORKDIR /workdir
