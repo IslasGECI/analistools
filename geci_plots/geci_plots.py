@@ -99,7 +99,7 @@ def set_map_tick_labels(fontsize=15):
     )
 
 
-def set_scale_bar(ax, length, width, loc="lower right", fontsize):
+def set_scale_bar(ax, length, width, loc="lower right", fontsize = 10):
     fontprops = fm.FontProperties(size = fontsize)
     scalebar = AnchoredSizeBar(
         ax.transData,
