@@ -9,6 +9,7 @@ from matplotlib.ticker import MaxNLocator
 from mpl_toolkits.axes_grid1.anchored_artists import AnchoredSizeBar
 
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 import numpy as np
 
 matplotlib.rcParams["mathtext.fontset"] = "stix"
@@ -98,7 +99,8 @@ def set_map_tick_labels(fontsize=15):
     )
 
 
-def set_scale_bar(ax, length, width, loc="lower right"):
+def set_scale_bar(ax, length, width, loc="lower right", fontsize):
+    fontprops = fm.FontProperties(size = fontsize)
     scalebar = AnchoredSizeBar(
         ax.transData,
         length,
@@ -108,6 +110,7 @@ def set_scale_bar(ax, length, width, loc="lower right"):
         color="black",
         frameon=False,
         size_vertical=width,
+        fontproperties=fontprops
     )
     ax.add_artist(scalebar)
 
