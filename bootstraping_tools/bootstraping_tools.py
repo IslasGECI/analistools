@@ -12,7 +12,7 @@ def power_law(T, Lambda, No):
 
 
 def lambda_calculator(
-    temporadas, maximo_nidos, max_iter=2000, lower_bounds=0, lambda_upper_bound=50
+    temporadas, maximo_nidos, max_iter=10000, lower_bounds=0, lambda_upper_bound=50
 ):
     temporadas = np.array(temporadas)
     numero_agno = temporadas - temporadas[0]
