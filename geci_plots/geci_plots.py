@@ -159,7 +159,7 @@ def rounded_ticks_array(superior_limit, min_value):
     )
     return ticks_array
 
-def ticks_positions_array(x)
+def ticks_positions_array(x):
     ticks_positions = np.linspace(1, len(x), len(x))
     ticks_positions[-1] = ticks_positions[-1] + 0.05
     return ticks_positions
