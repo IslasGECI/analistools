@@ -151,8 +151,18 @@ def plot_location_plot(ax, linea_costa, margen_x, margen_y, box_length=500):
     for axis in ["top", "bottom", "left", "right"]:
         axins.spines[axis].set_linewidth(2)
 
+def rounded_ticks_array(superior_limit, min_value):
+    ticks_array = np.arange(
+        np.floor(min_value - min_value * 0.15),
+        roundup(superior_limit * 1.2, 10),
+        roundup(superior_limit * 0.2, 10),
+    )
+    return ticks_array
 
-
+def ticks_positions_array(x)
+    ticks_positions = np.linspace(1, len(x), len(x))
+    ticks_positions[-1] = ticks_positions[-1] + 0.05
+    return ticks_positions
 
 
 
